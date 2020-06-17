@@ -1,4 +1,5 @@
-﻿using HospitalDB.DTOs.Requests;
+﻿using APBD_13.Exceptions;
+using HospitalDB.DTOs.Requests;
 using HospitalDB.DTOs.Response;
 using HospitalDB.NewFolder;
 using Microsoft.CodeAnalysis.FlowAnalysis;
@@ -25,7 +26,7 @@ namespace HospitalDB.Services
 
 			if (!_context.Orders.Any())
 			{
-				return null;
+				throw new OrderDoesNotExistException("The List Of Orders is empty");
 			}
 
 			if (!name.Equals(""))
@@ -35,7 +36,7 @@ namespace HospitalDB.Services
 
 				if (client is null)
 				{
-					return null; // no customer with such name was found
+					throw new OrderDoesNotExistException("no customer with such name was found"); 
 				}
 				var orders = _context.Orders.Where(o => o.IdClient.Equals(client.IdClient)).ToList();
 

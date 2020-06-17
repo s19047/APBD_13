@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using APBD_13.Exceptions;
 using HospitalDB.DTOs.Requests;
 using HospitalDB.NewFolder;
 using Microsoft.AspNetCore.Mvc;
@@ -25,15 +26,16 @@ namespace WebApplication1.Controllers
         [HttpGet("/orders/{name?}")]
         public IActionResult GetCustomerOrders(string name ="")
         {
-            var res = _service.GetCustomerOrders(name);
-            if (!(res is null))
+            try
             {
+                var res = _service.GetCustomerOrders(name);
                 return Ok(res);
-            }
-            else
+
+            }catch(OrderDoesNotExistException e)
             {
-                return BadRequest("Something went wrong :/");
+                return NotFound(e.Message);
             }
+
         }
 
         [HttpPost("client/{id}/orders")]
